@@ -298,6 +298,35 @@ button{font-family:inherit;cursor:pointer;border:0;color:inherit}
 .awards{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:6px}
 .awards .mvp{margin-bottom:0}
 @media (max-width:820px){.modes{grid-template-columns:1fr!important}.buzz{min-height:104px;font-size:1.1rem}.reactions{bottom:40px;left:6px}.reactions button{width:38px;height:38px;font-size:18px}.count-num{font-size:5rem;min-height:5rem}}
+.crest{position:relative;display:inline-grid;place-items:center;width:var(--sz);height:var(--sz);flex:none;filter:drop-shadow(0 6px 12px rgba(0,0,0,.4))}
+.crest svg{position:absolute;inset:0;width:100%;height:100%}
+.crest .ce{position:relative;font-size:calc(var(--sz)*.46);line-height:1;margin-top:calc(var(--sz)*-.02);filter:drop-shadow(0 3px 4px rgba(0,0,0,.45))}
+.crest .ce.txt{font-family:'Lalezar','Tajawal',sans-serif;color:#fff;font-size:calc(var(--sz)*.38);letter-spacing:.5px;text-shadow:0 2px 6px rgba(0,0,0,.45)}
+.ictxt{font-family:'Lalezar','Tajawal',sans-serif;font-weight:400;padding:0 6px;border-radius:6px;background:rgba(255,255,255,.18)}
+.avatar-btn{position:relative;background:none;padding:0;transition:transform .2s;flex:none}
+.avatar-btn:hover{transform:rotate(-6deg) scale(1.07)}
+.avatar-btn .edit{position:absolute;bottom:-4px;left:-6px;width:24px;height:24px;border-radius:50%;background:#fff;color:#08275a;font-size:12px;display:grid;place-items:center;box-shadow:0 3px 8px rgba(0,0,0,.35)}
+.sc-crest{flex:none;transition:transform .3s}
+.sc.turn .sc-crest{animation:float 2s ease-in-out infinite}
+.banner .big .crest{margin:0 auto}
+.res-crest{display:flex;justify-content:center;margin-bottom:4px}
+.picker{max-width:560px!important;max-height:90vh;overflow:auto}
+.picker .pv{display:flex;align-items:center;justify-content:center;gap:18px;margin:6px 0 14px;text-align:right}
+.picker .pv b{display:block;font-size:1.3rem}.picker .pv small{color:var(--muted)}
+.picker .shapes{display:flex;justify-content:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.picker .shapes button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.05);border:1.5px solid transparent;font-size:.8rem;font-weight:700}
+.picker .shapes button.on{border-color:#fff;background:rgba(255,255,255,.14)}
+.picker .tabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px}
+.picker .tabs button{padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1.5px solid var(--line);font-weight:700;font-size:.88rem}
+.picker .tabs button.on{background:#fff;color:#08275a;border-color:#fff}
+.picker .emojis{grid-template-columns:repeat(6,1fr);max-height:300px;overflow:auto;padding:4px}
+.picker .emojis button{padding:6px;display:grid;place-items:center;background:rgba(255,255,255,.04);border:1.5px solid transparent;border-radius:14px;transition:.15s}
+.picker .emojis button:hover{transform:scale(1.08);background:rgba(255,255,255,.12)}
+.picker .emojis button.on{border-color:#fff;background:rgba(255,255,255,.16)}
+.picker .letters{display:flex;gap:10px;margin:14px 0}
+.picker .letters .field{text-align:center;font-size:1.4rem;font-weight:800}
+.picker .row{margin-top:14px}
+@media (max-width:820px){.picker .emojis{grid-template-columns:repeat(4,1fr)}.sc-crest .crest{--sz:40px!important}}
 @media print{body *{display:none!important}body::after{content:"الطباعة غير مسموحة";display:block!important}}
 @media (max-width:820px){
   .teams{grid-template-columns:1fr}.vs{text-align:center;font-size:1.8rem}
@@ -441,7 +470,36 @@ const CATS={
   social:{n:'التواصل الاجتماعي',e:'📱',c:'#ff7ad9'},
 };
 const COLORS=['#ff5d8f','#3fb5ff','#22d39a','#ffc94a','#2f6bff','#ff9f1c','#36e2d0','#ff4d4d'];
-const ICONS=['🦅','🦁','🐺','🐎','🦈','🐉','🔥','⚡','👑','🚀','🏆','🌟','🐪','🦂','🐯','🦉','⚔️','🛡️'];
+const ICON_GROUPS={
+  'حيوانات':['🦅','🦁','🐺','🐎','🦈','🐉','🐯','🐆','🦉','🦂','🐪','🐻','🦊','🐍','🐊','🦏','🐘','🦍','🦬','🐬','🦜','🐝','🦋','🐲'],
+  'قوة ورموز':['🔥','⚡','👑','🚀','🏆','🌟','⚔️','🛡️','💎','🎯','🧠','💥','🌪️','☄️','🌙','☀️','🔱','⚓','🗡️','🏹','💫','🪐','🌊','❄️'],
+  'رياضة':['⚽','🏀','🏐','🎾','🏈','⚾','🥇','🏁','🥊','🏓','🏒','⛳','🎳','🏇','🤺','🚴','🏊','🥋'],
+  'تراث وخليج':['🌴','🕌','⛵','🏜️','🏰','🪔','📜','🧭','🗺️','🐚','🌾','🍯','☕','🫖','🐫','🪶','🏺','🛶'],
+  'علوم وتقنية':['🤖','🧪','🔬','🛰️','💡','🧬','🖥️','🎮','🕹️','📡','⚙️','🔭','💻','🧲','🔋','📱'],
+  'مرح':['😎','🤠','🥷','🧙‍♂️','🦸‍♂️','👽','👾','🦄','🍕','🌶️','🍉','🎩','🤖','🐼','🐸','🐙'],
+};
+const ICONS=Object.values(ICON_GROUPS).flat();
+const SHAPES={
+  shield:'M50 3 L92 16 V48 C92 75 73 91 50 98 C27 91 8 75 8 48 V16 Z',
+  hex:'M50 3 L92 26 V74 L50 97 L8 74 V26 Z',
+  circle:'M50 4 A46 46 0 1 1 49.9 4 Z',
+  square:'M22 5 H78 Q95 5 95 22 V78 Q95 95 78 95 H22 Q5 95 5 78 V22 Q5 5 22 5 Z',
+  star:'M50 3 L60 20 L79 13 L80 33 L97 42 L85 57 L93 75 L74 79 L68 97 L50 88 L32 97 L26 79 L7 75 L15 57 L3 42 L20 33 L21 13 L40 20 Z',
+};
+const SHAPE_NAMES={shield:'درع',hex:'سداسي',circle:'دائرة',square:'مربع',star:'نجمة'};
+function shade(hex,amt){let c=hex.replace('#','');if(c.length===3)c=c.split('').map(x=>x+x).join('');const n=parseInt(c,16);let r=n>>16,g=n>>8&255,b=n&255;const t=amt<0?0:255,p=Math.abs(amt);r=Math.round((t-r)*p+r);g=Math.round((t-g)*p+g);b=Math.round((t-b)*p+b);return `rgb(${r},${g},${b})`}
+let crestId=0;
+// النص المختصر للشعار داخل السطور
+function ic(icon){return icon&&icon.startsWith('txt:')?`<b class="ictxt">${esc(icon.slice(4))}</b>`:esc(icon||'')}
+// شعار الفريق المصمم (درع/دائرة/سداسي...) بتدرج لون الفريق
+function crest(icon,color,size=54,shape='shield'){
+  const id='cg'+(++crestId),d=SHAPES[shape]||SHAPES.shield,txt=icon&&icon.startsWith('txt:');
+  return `<span class="crest" style="--sz:${size}px"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(color,.35)}"/><stop offset=".55" stop-color="${color}"/><stop offset="1" stop-color="${shade(color,-.45)}"/></linearGradient></defs>
+    <path d="${d}" fill="url(#${id})" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"/>
+    <path d="${d}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2" transform="translate(9 9) scale(.82)" stroke-linejoin="round"/>
+    <ellipse cx="50" cy="26" rx="30" ry="12" fill="rgba(255,255,255,.18)"/></svg><span class="ce ${txt?'txt':''}">${txt?esc(icon.slice(4)):esc(icon)}</span></span>`;
+}
+
 const PTS=d=>d*100;
 
 let G=null,timerInt=null;
@@ -671,7 +729,7 @@ function initSetup(){
 }
 function renderTeam(i){
   const t=S.teams[i],el=$(i?'#teamB':'#teamA');el.style.setProperty('--tc',t.color);
-  el.innerHTML=`<div class="team-head"><button class="avatar" title="تغيير الشعار">${t.icon}</button><input class="field tname" maxlength="22" value="${esc(t.name)}" placeholder="اسم الفريق"></div>
+  el.innerHTML=`<div class="team-head"><button class="avatar-btn" title="تغيير الشعار">${crest(t.icon,t.color,62,t.shape)}<span class="edit">✏️</span></button><input class="field tname" maxlength="22" value="${esc(t.name)}" placeholder="اسم الفريق"></div>
   <div class="swatches">${COLORS.map(c=>`<button class="sw ${c===t.color?'on':''}" data-c="${c}" style="background:${c}"></button>`).join('')}<span class="count">${t.members.length} / 6 أعضاء</span></div>
   <div class="members">${t.members.map((m,j)=>`<div class="mem"><span class="num">${j+1}</span><input class="field" data-j="${j}" maxlength="20" value="${esc(m)}" placeholder="اسم العضو ${j+1}">${t.members.length>1?`<button class="x" data-j="${j}" title="حذف">✕</button>`:''}</div>`).join('')}</div>
   ${t.members.length<6?'<button class="addmem">＋ إضافة عضو</button>':''}`;
@@ -680,7 +738,28 @@ function renderTeam(i){
   el.querySelectorAll('.mem .x').forEach(b=>b.onclick=()=>{t.members.splice(+b.dataset.j,1);save();renderTeam(i)});
   el.querySelector('.addmem')?.addEventListener('click',()=>{t.members.push('');save();SFX.click();renderTeam(i);el.querySelector(`.mem input[data-j="${t.members.length-1}"]`).focus()});
   el.querySelectorAll('.sw').forEach(b=>b.onclick=()=>{t.color=b.dataset.c;save();SFX.click();renderTeam(i)});
-  el.querySelector('.avatar').onclick=()=>{const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="card"><h3>اختر شعار الفريق</h3><div class="emojis">${ICONS.map(e=>`<button>${e}</button>`).join('')}</div></div>`;document.body.appendChild(m);m.onclick=e=>{if(e.target===m)m.remove()};m.querySelectorAll('.emojis button').forEach(b=>b.onclick=()=>{t.icon=b.textContent;save();m.remove();renderTeam(i)})};
+  el.querySelector('.avatar-btn').onclick=()=>pickCrest(i);
+}
+
+function pickCrest(i){
+  const t=S.teams[i];let tab=Object.keys(ICON_GROUPS).find(g=>ICON_GROUPS[g].includes(t.icon))||'حيوانات';
+  const m=document.createElement('div');m.className='modal';document.body.appendChild(m);SFX.click();
+  const draw=()=>{
+    m.innerHTML=`<div class="card picker"><h3>شعار الفريق</h3>
+      <div class="pv">${crest(t.icon,t.color,120,t.shape)}<div><b>${esc(t.name||'الفريق')}</b><small>اختر الشكل والرمز</small></div></div>
+      <div class="shapes">${Object.keys(SHAPES).map(k=>`<button data-s="${k}" class="${(t.shape||'shield')===k?'on':''}">${crest(t.icon,t.color,44,k)}<span>${SHAPE_NAMES[k]}</span></button>`).join('')}</div>
+      <div class="tabs">${Object.keys(ICON_GROUPS).map(g=>`<button data-g="${g}" class="${g===tab?'on':''}">${g}</button>`).join('')}<button data-g="حروف" class="${tab==='حروف'?'on':''}">🔤 حروف</button></div>
+      ${tab==='حروف'?`<div class="letters"><input class="field" id="lt" maxlength="2" placeholder="مثال: ص أو SH" value="${t.icon.startsWith('txt:')?esc(t.icon.slice(4)):''}"><button class="btn btn-gold" id="ltok">استخدام</button></div>`
+        :`<div class="emojis">${ICON_GROUPS[tab].map(e=>`<button data-e="${e}" class="${e===t.icon?'on':''}">${crest(e,t.color,52,t.shape)}</button>`).join('')}</div>`}
+      <div class="row"><button class="btn btn-ghost" id="rnd">🎲 عشوائي</button><button class="btn btn-gold" id="done">تم ✔️</button></div></div>`;
+    m.querySelectorAll('.shapes button').forEach(b=>b.onclick=()=>{t.shape=b.dataset.s;save();SFX.pop();draw()});
+    m.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.g;SFX.click();draw()});
+    m.querySelectorAll('.emojis button').forEach(b=>b.onclick=()=>{t.icon=b.dataset.e;save();SFX.pop();draw()});
+    const lt=m.querySelector('#ltok');if(lt)lt.onclick=()=>{const v=m.querySelector('#lt').value.trim();if(v){t.icon='txt:'+v;save();SFX.pop();draw()}};
+    m.querySelector('#rnd').onclick=()=>{t.icon=ICONS[Math.floor(Math.random()*ICONS.length)];t.shape=Object.keys(SHAPES)[Math.floor(Math.random()*5)];save();SFX.whoosh();draw()};
+    m.querySelector('#done').onclick=()=>{m.remove();SFX.click();renderTeam(i)};
+  };
+  draw();m.onclick=e=>{if(e.target===m){m.remove();renderTeam(i)}};
 }
 function toast(msg){const d=document.createElement('div');d.className='float-pts';d.style.cssText='left:50%;top:40%;font-family:Tajawal;font-size:1.2rem;font-weight:800;color:#fff;background:rgba(0,0,0,.75);padding:12px 20px;border-radius:14px;animation:fadeUp .3s';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
 
@@ -699,7 +778,7 @@ function markUsed(q){const u=store.get('used',[]);if(!u.includes(q.id)){u.push(q
 /* ========= اللعبة ========= */
 const stat=(t,p)=>t.stats[p]=t.stats[p]||{c:0,w:0};
 function startGame(){
-  const teams=S.teams.map((t,i)=>{const mem=t.members.map(m=>m.trim()).filter(Boolean);return{name:t.name.trim()||(i?'الفريق الثاني':'الفريق الأول'),color:t.color,icon:t.icon,members:mem.length?mem:['كل الفريق'],score:0,streak:0,maxStreak:0,turn:0,correct:0,wrong:0,steals:0,life:{fifty:1,time:1,swap:1},stats:{}}});
+  const teams=S.teams.map((t,i)=>{const mem=t.members.map(m=>m.trim()).filter(Boolean);return{name:t.name.trim()||(i?'الفريق الثاني':'الفريق الأول'),color:t.color,icon:t.icon,shape:t.shape||'shield',members:mem.length?mem:['كل الفريق'],score:0,streak:0,maxStreak:0,turn:0,correct:0,wrong:0,steals:0,life:{fifty:1,time:1,swap:1},stats:{}}});
   if(teams[0].name===teams[1].name)teams[1].name+=' 2';
   document.documentElement.style.setProperty('--a',teams[0].color);document.documentElement.style.setProperty('--b',teams[1].color);
   const pool=filterPool();
@@ -726,7 +805,7 @@ function startGame(){
 const MODE_NAME={classic:'الجولات السريعة',buzzer:'جرس السرعة',board:'لوحة التحدي'};
 function renderScore(){
   const T=G.teams,lead=T[0].score===T[1].score?-1:(T[0].score>T[1].score?0:1);
-  const box=(t,i)=>`<div class="sc ${i?'b':''} ${G.cur===i?'turn':''}" style="--tc:${t.color}"><div class="avatar">${t.icon}</div><div style="min-width:0"><div class="nm">${esc(t.name)}${lead===i?' <span class="crown">👑</span>':''}</div><div class="lives"><span class="${t.life.fifty?'':'used'}" title="حذف إجابتين">✂️</span><span class="${t.life.time?'':'used'}" title="وقت إضافي">⏱️</span><span class="${t.life.swap?'':'used'}" title="تبديل السؤال">🔄</span>${t.streak>=2?`<span class="streak">🔥${t.streak}</span>`:''}</div></div><div class="pts" id="pts${i}">${G.disp[i]}</div></div>`;
+  const box=(t,i)=>`<div class="sc ${i?'b':''} ${G.cur===i?'turn':''}" style="--tc:${t.color}"><div class="sc-crest">${crest(t.icon,t.color,52,t.shape)}</div><div style="min-width:0"><div class="nm">${esc(t.name)}${lead===i?' <span class="crown">👑</span>':''}</div><div class="lives"><span class="${t.life.fifty?'':'used'}" title="حذف إجابتين">✂️</span><span class="${t.life.time?'':'used'}" title="وقت إضافي">⏱️</span><span class="${t.life.swap?'':'used'}" title="تبديل السؤال">🔄</span>${t.streak>=2?`<span class="streak">🔥${t.streak}</span>`:''}</div></div><div class="pts" id="pts${i}">${G.disp[i]}</div></div>`;
   $('#scorebar').innerHTML=box(T[0],0)+`<div class="mid"><div class="q-no">${G.mode==='board'?G.num:Math.min(G.num+1,G.total)} / ${G.total}</div><small>${MODE_NAME[G.mode]}</small></div>`+box(T[1],1);
   $('#prog').style.width=(G.num/G.total*100)+'%';
   const a=Math.max(T[0].score,0)+100,b=Math.max(T[1].score,0)+100;
@@ -759,8 +838,8 @@ function nextRound(){
   if(S.final&&i===G.total-2)steps.push(cb=>overlay('#ff5d5d','<div class="big">🔥</div><h3>الجولة الحاسمة!</h3><p>آخر سؤالين بنقاط مضاعفة ×2</p>',2300,SFX.final,cb));
   if(G.golden.has(i))steps.push(cb=>overlay('#7fd3ff','<div class="big spin">⭐</div><h3>سؤال ذهبي!</h3><p>النقاط مضاعفة ×2</p>',1900,SFX.golden,cb));
   steps.push(()=>{
-    if(G.mode==='classic'){G.cur=i%2;renderScore();const t=G.teams[G.cur];countBanner(t.color,t.icon,`دور ${esc(t.name)}`,`يجيب الآن: <b>${esc(playerOf(t))}</b>`,()=>ask(G.queue[i]))}
-    else{G.cur=-1;renderScore();const [A,B]=G.teams;countBanner('#7fd3ff','🔔','سؤال للجميع!',`${A.icon} <b>${esc(playerOf(A))}</b> 🆚 <b>${esc(playerOf(B))}</b> ${B.icon}<br><small>أول من يضغط الجرس يجيب</small>`,()=>ask(G.queue[i]))}
+    if(G.mode==='classic'){G.cur=i%2;renderScore();const t=G.teams[G.cur];countBanner(t.color,crest(t.icon,t.color,96,t.shape),`دور ${esc(t.name)}`,`يجيب الآن: <b>${esc(playerOf(t))}</b>`,()=>ask(G.queue[i]))}
+    else{G.cur=-1;renderScore();const [A,B]=G.teams;countBanner('#7fd3ff','🔔','سؤال للجميع!',`${ic(A.icon)} <b>${esc(playerOf(A))}</b> 🆚 <b>${esc(playerOf(B))}</b> ${ic(B.icon)}<br><small>أول من يضغط الجرس يجيب</small>`,()=>ask(G.queue[i]))}
   });
   (function run(k){steps[k](()=>run(k+1))})(0);
 }
@@ -769,9 +848,9 @@ function nextRound(){
 function renderBoard(){
   $('#qView').classList.add('hidden');const bv=$('#boardView');bv.classList.remove('hidden');
   const {cats,rows,cells}=G.board;const t=G.teams[G.cur];renderScore();
-  bv.innerHTML=`<div class="board-hint"><span class="pill" style="--tc:${t.color}">${t.icon} ${esc(t.name)}</span> اختر سؤالًا — يجيب: <span class="pill player">🎤 ${esc(playerOf(t))}</span>${G.goldenTiles.size?'<br><small style="color:var(--muted)">⭐ بعض الخانات ذهبية مخفية بنقاط مضاعفة!</small>':''}</div>
+  bv.innerHTML=`<div class="board-hint"><span class="pill" style="--tc:${t.color}">${ic(t.icon)} ${esc(t.name)}</span> اختر سؤالًا — يجيب: <span class="pill player">🎤 ${esc(playerOf(t))}</span>${G.goldenTiles.size?'<br><small style="color:var(--muted)">⭐ بعض الخانات ذهبية مخفية بنقاط مضاعفة!</small>':''}</div>
   <div class="board" style="grid-template-columns:repeat(${cats.length},1fr)">${cats.map(c=>`<div class="colh" style="--cc:${CATS[c].c}"><span class="e">${CATS[c].e}</span>${CATS[c].n}</div>`).join('')}
-  ${rows.map((d,r)=>cats.map((c,ci)=>{const key=c+'_'+r,u=cells[key];return `<button class="tile ${u?'used-'+u:''}" style="animation-delay:${(r*cats.length+ci)*25}ms" data-k="${key}" data-c="${c}" data-d="${d}" ${u?'disabled':''}>${u?(u==='x'?'—':(u==='a'?G.teams[0].icon:G.teams[1].icon)):PTS(d)}</button>`}).join('')).join('')}</div>`;
+  ${rows.map((d,r)=>cats.map((c,ci)=>{const key=c+'_'+r,u=cells[key];return `<button class="tile ${u?'used-'+u:''}" style="animation-delay:${(r*cats.length+ci)*25}ms" data-k="${key}" data-c="${c}" data-d="${d}" ${u?'disabled':''}>${u?(u==='x'?'—':(u==='a'?ic(G.teams[0].icon):ic(G.teams[1].icon))):PTS(d)}</button>`}).join('')).join('')}</div>`;
   bv.querySelectorAll('.tile:not([disabled])').forEach(b=>{b.onmouseenter=()=>SFX.tock();b.onclick=()=>{
     SFX.click();const c=b.dataset.c,d=+b.dataset.d;
     let cand=G.pool.filter(q=>q.c===c&&q.d===d&&!G.usedIds?.has(q.id));
@@ -800,7 +879,7 @@ function ask(q,forceD){
   const card=$('#qcard');card.classList.toggle('golden',Q.mult>1);
   $('#multBadge').classList.toggle('hidden',Q.mult<2);$('#multBadge').textContent=Q.mult>=4?'🔥⭐ ×4':(S.final&&G.mode!=='board'&&G.num>=G.total-2&&!G.golden.has(G.num)?'🔥 نقاط مضاعفة ×2':'⭐ سؤال ذهبي ×'+Q.mult);
   if(G.mode==='buzzer')$('#turnbar').innerHTML=`<span class="pill player">🔔 أول من يضغط الجرس يجيب</span>`;
-  else{const t=G.teams[G.cur];$('#turnbar').innerHTML=`<span class="pill" style="--tc:${t.color}">${t.icon} ${esc(t.name)}</span><span class="pill player">🎤 ${esc(playerOf(t))}</span>`}
+  else{const t=G.teams[G.cur];$('#turnbar').innerHTML=`<span class="pill" style="--tc:${t.color}">${ic(t.icon)} ${esc(t.name)}</span><span class="pill player">🎤 ${esc(playerOf(t))}</span>`}
   const cat=CATS[q.c];$('#qCat').textContent=`${cat.e} ${cat.n}`;$('#qCat').style.setProperty('--cc',cat.c);
   $('#qDiff').innerHTML=`${'★'.repeat(d)}<span style="opacity:.25">${'★'.repeat(3-d)}</span> ${Q.pts}`;
   typeText($('#qText'),q.t==='tf'?'صح أم خطأ؟ '+q.q:q.q);
@@ -825,7 +904,7 @@ function renderAnswers(){
 function renderBuzzers(on){
   const box=$('#buzzers');if(!on){box.innerHTML='';box.classList.add('hidden');return}
   box.classList.remove('hidden');const [A,B]=G.teams;
-  box.innerHTML=`<button class="buzz" data-t="0" style="--tc:${A.color}"><span class="bi">🔔</span>${A.icon} ${esc(A.name)}<small>🎤 ${esc(playerOf(A))} · مفتاح L أو →</small></button><button class="buzz" data-t="1" style="--tc:${B.color}"><span class="bi">🔔</span>${B.icon} ${esc(B.name)}<small>🎤 ${esc(playerOf(B))} · مفتاح A أو ←</small></button>`;
+  box.innerHTML=`<button class="buzz" data-t="0" style="--tc:${A.color}"><span class="bi">🔔</span>${ic(A.icon)} ${esc(A.name)}<small>🎤 ${esc(playerOf(A))} · مفتاح L أو →</small></button><button class="buzz" data-t="1" style="--tc:${B.color}"><span class="bi">🔔</span>${ic(B.icon)} ${esc(B.name)}<small>🎤 ${esc(playerOf(B))} · مفتاح A أو ←</small></button>`;
   box.querySelectorAll('.buzz').forEach(b=>b.onpointerdown=e=>{e.preventDefault();buzz(+b.dataset.t)});
 }
 function buzz(team){
@@ -834,7 +913,7 @@ function buzz(team){
   SFX['buzz'+team]();flash(t.color);vib(120);
   const btn=$(`#buzzers .buzz[data-t="${team}"]`);if(btn)btn.classList.add('hit');
   setTimeout(()=>{renderBuzzers(false);$('#answers').classList.remove('locked');
-    $('#turnbar').innerHTML=`<span class="pill" style="--tc:${t.color}">🔔 ${t.icon} ${esc(t.name)} ضغط أولًا!</span><span class="pill player">🎤 ${esc(playerOf(t))}</span>`;
+    $('#turnbar').innerHTML=`<span class="pill" style="--tc:${t.color}">🔔 ${ic(t.icon)} ${esc(t.name)} ضغط أولًا!</span><span class="pill player">🎤 ${esc(playerOf(t))}</span>`;
     renderScore();Q.t0=Date.now();startTimer(S.timer||15)},350);
 }
 function noBuzz(){SFX.timeup();renderBuzzers(false);$('#answers').classList.remove('locked');$$('#answers .ans').forEach(b=>b.disabled=true);revealRight();finish(-1,false,'⌛ لم يضغط أي فريق الجرس!')}
@@ -921,10 +1000,10 @@ function revealRight(){Q.opts.forEach((o,i)=>{if(o.ok)$(`#answers .ans[data-i="$
 function overlayMini(text){const d=document.createElement('div');d.className='mini-banner';d.textContent=text;document.body.appendChild(d);setTimeout(()=>d.remove(),1800)}
 function secondChance(msg){
   const other=G.teams[1-G.cur];
-  $('#feedback').innerHTML=`<div class="feedback no"><div>${esc(msg)}</div><div>🔁 الفرصة الآن لـ ${other.icon} ${esc(other.name)} (+${Q.pts})</div></div>`;
+  $('#feedback').innerHTML=`<div class="feedback no"><div>${esc(msg)}</div><div>🔁 الفرصة الآن لـ ${ic(other.icon)} ${esc(other.name)} (+${Q.pts})</div></div>`;
   setTimeout(()=>{if(Q.done)return;
     Q.stealing=true;SFX.steal();flash(other.color);
-    $('#turnbar').innerHTML=`<span class="pill" style="--tc:${other.color}">🔁 ${other.icon} ${esc(other.name)}</span><span class="pill player">🎤 ${esc(playerOf(other))}</span>`;
+    $('#turnbar').innerHTML=`<span class="pill" style="--tc:${other.color}">🔁 ${ic(other.icon)} ${esc(other.name)}</span><span class="pill player">🎤 ${esc(playerOf(other))}</span>`;
     $$('#answers .ans').forEach((b,i)=>{if(!Q.disabled.has(i))b.disabled=false});
     $$('.sc').forEach((s,i)=>s.classList.toggle('turn',i===1-G.cur));
     Q.t0=Date.now();startTimer(S.timer?Math.min(15,S.timer):15);
@@ -936,7 +1015,7 @@ function offerSteal(msg){
   $('#feedback').innerHTML=`<div class="feedback no"><div>${msg}</div><div class="row"><button class="btn btn-gold" id="stealBtn" style="background:${other.color};color:#fff">🦅 فرصة السرقة لـ ${esc(other.name)} (+${Math.round(Q.pts/2)})</button><button class="btn btn-ghost" id="skipSteal">كشف الإجابة</button></div></div>`;
   $('#stealBtn').onclick=()=>{
     Q.stealing=true;$('#feedback').innerHTML='';SFX.steal();flash(other.color);
-    $('#turnbar').innerHTML=`<span class="pill" style="--tc:${other.color}">🦅 سرقة: ${other.icon} ${esc(other.name)}</span><span class="pill player">يتشاور الفريق بالكامل</span>`;
+    $('#turnbar').innerHTML=`<span class="pill" style="--tc:${other.color}">🦅 سرقة: ${ic(other.icon)} ${esc(other.name)}</span><span class="pill player">يتشاور الفريق بالكامل</span>`;
     $$('#answers .ans').forEach((b,i)=>{if(!Q.disabled.has(i))b.disabled=false});
     $$('.sc').forEach((s,i)=>s.classList.toggle('turn',i===1-G.cur));
     Q.t0=Date.now();startTimer(S.timer?Math.min(15,S.timer):0);
@@ -969,8 +1048,8 @@ function endGame(){
   const [A,B]=G.teams;const win=A.score===B.score?-1:(A.score>B.score?0:1);
   const all=[];G.teams.forEach(t=>Object.entries(t.stats).forEach(([n,s])=>all.push({n,t,c:s.c,w:s.w})));
   all.sort((a,b)=>b.c-a.c||a.w-b.w);const mvp=all[0]&&all[0].c>0?all[0]:null;
-  const card=(t,cls)=>`<div class="card ${cls}" style="--tc:${t.color}"><div style="font-size:2.6rem">${t.icon}</div><h3 style="font-size:1.7rem">${esc(t.name)}</h3><div class="big">${t.score}</div><div style="color:var(--muted);font-weight:700">✔️ ${t.correct} صحيحة · ✖️ ${t.wrong} خاطئة · 🦅 ${t.steals} سرقة · 🔥 أطول سلسلة ${t.maxStreak}</div><div class="stats">${t.members.map(m=>{const s=t.stats[m]||{c:0,w:0};return `<div><span>🎤 ${esc(m)}</span><span>✔️ ${s.c} · ✖️ ${s.w}</span></div>`}).join('')}</div></div>`;
-  $('#results').innerHTML=`<div class="results"><div class="trophy">${win<0?'🤝':'🏆'}</div><h2>${win<0?'تعادل مثير!':'الفوز لـ '+esc(G.teams[win].name)+' '+G.teams[win].icon}</h2>
+  const card=(t,cls)=>`<div class="card ${cls}" style="--tc:${t.color}"><div class="res-crest">${crest(t.icon,t.color,92,t.shape)}</div><h3 style="font-size:1.7rem">${esc(t.name)}</h3><div class="big">${t.score}</div><div style="color:var(--muted);font-weight:700">✔️ ${t.correct} صحيحة · ✖️ ${t.wrong} خاطئة · 🦅 ${t.steals} سرقة · 🔥 أطول سلسلة ${t.maxStreak}</div><div class="stats">${t.members.map(m=>{const s=t.stats[m]||{c:0,w:0};return `<div><span>🎤 ${esc(m)}</span><span>✔️ ${s.c} · ✖️ ${s.w}</span></div>`}).join('')}</div></div>`;
+  $('#results').innerHTML=`<div class="results"><div class="trophy">${win<0?'🤝':'🏆'}</div><h2>${win<0?'تعادل مثير!':'الفوز لـ '+esc(G.teams[win].name)+' '+ic(G.teams[win].icon)}</h2>
   <div class="awards">${mvp?`<div class="mvp">⭐ نجم المباراة: ${esc(mvp.n)} (${esc(mvp.t.name)}) — ${mvp.c} إجابات صحيحة</div>`:''}${G.fast?`<div class="mvp">⚡ أسرع إجابة: ${esc(G.fast.n)} (${esc(G.fast.t.name)}) — ${G.fast.s.toFixed(1)} ثانية</div>`:''}</div>
   <div class="final ${win===0?'win-a':win===1?'win-b':''}">${card(A,'ta')}${card(B,'tb')}</div>
   <div class="row" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-gold btn-lg" id="again">🔁 مباراة جديدة بنفس الفرق</button><button class="btn btn-ghost btn-lg" id="toSetup">⚙️ تعديل الفرق والإعدادات</button></div></div>`;
